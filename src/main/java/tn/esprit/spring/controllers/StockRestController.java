@@ -3,6 +3,7 @@ package tn.esprit.spring.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,9 @@ import tn.esprit.spring.entities.Stock;
 import tn.esprit.spring.services.IStock;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/stock")
+
 public class StockRestController {
 	@Autowired
 	IStock stockService;
@@ -55,10 +58,11 @@ public class StockRestController {
 		}
 		
 		// http://localhost:8090/SpringMVC/stock/modify-stock
-		@PutMapping("/modify-stock")
+		@PutMapping("/modify-stock/{stock-id}")
 		@ResponseBody
-		public Stock modifyStock(@RequestBody Stock stock) {
-		return stockService.updateStock(stock);
+		public Stock modifyStock(@RequestBody Stock stock, @PathVariable("stock-id") Long idStock) {
+			stock.setIdStock(idStock);
+			return stockService.updateStock(stock);
 		}
 		
 }

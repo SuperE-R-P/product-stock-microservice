@@ -37,6 +37,7 @@ public class Stock implements Serializable {
 	private String stockName;
 	private Integer qte;
 	private Integer minQte;
+	private String description;
 	@OneToMany(mappedBy = "stock")
 	@JsonIgnore
 	private Set<Product> products;

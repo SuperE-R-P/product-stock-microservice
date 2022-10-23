@@ -3,6 +3,7 @@ package tn.esprit.spring.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,14 +15,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tn.esprit.spring.entities.Product;
+import tn.esprit.spring.entities.Stock;
 import tn.esprit.spring.services.IProduct;
+import tn.esprit.spring.services.IStock;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/product")
 public class ProductRestController {
 	@Autowired
 	IProduct productService;
+	
+	@Autowired
+	IStock stockService;
 	
 	// http://localhost:8090/SpringMVC/product/retrieve-all-products
 	@GetMapping("/retrieve-all-products")
@@ -37,7 +44,7 @@ public class ProductRestController {
 	public Product retrieveProduct(@PathVariable("product-id") Long idProduct) {
 	return productService.retrieveProduct(idProduct);
 	}
-	
+
 	// http://localhost:8090/SpringMVC/servlet/add-product
 	@PostMapping("/add-product/{idStock}")
 	@ResponseBody
@@ -46,18 +53,17 @@ public class ProductRestController {
 		Product product = productService.addProduct(p,idStock);
 		return product;
 	}
-	
 	// http://localhost:8090/SpringMVC/product/remove-product/{product-id}
 	@DeleteMapping("/remove-product/{product-id}")
 	@ResponseBody
 	public void removeProduct(@PathVariable("product-id") Long idProduct) {
 		productService.deleteProduct(idProduct);
 	}
-	
 	// http://localhost:8080/SpringMVC/servlet/modify-product
-	@PutMapping("/modify-product")
+	@PutMapping("/modify-product/{product-id}")
 	@ResponseBody
-	public Product modifyProduct(@RequestBody Product product) {
+	public Product modifyProduct(@RequestBody Product product,@PathVariable("product-id") Long idProduct) {
+		product.setIdProduct(idProduct);
 	return productService.updateProduct(product);
 	}
 	
